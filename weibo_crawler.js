@@ -91,7 +91,7 @@ function parseHotDataDiv(data) {
 	}
 	writeDB(rankArr);
 	// 同时将数据写一份到本地文件，做个备份
-	fs.writeFileSync('out.txt', JSON.stringify(rankArr));
+	fs.writeFileSync('weibo_out.txt', JSON.stringify(rankArr));
 }
 
 
