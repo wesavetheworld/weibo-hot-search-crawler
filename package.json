@@ -2,9 +2,10 @@
   "name": "weibo",
   "version": "1.0.0",
   "description": "crawl weibo realtime hot search words",
-  "main": "crawler.js",
+  "main": "app.js",
   "dependencies": {
     "cheerio": "^0.22.0",
+    "encoding": "^0.1.12",
     "mysql": "^2.11.1",
     "request": "^2.74.0"
   },

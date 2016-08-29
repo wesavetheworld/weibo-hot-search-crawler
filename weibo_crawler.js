@@ -26,15 +26,16 @@ var crawlOpt = {
 	gzip: true
 };
 
-request(crawlOpt, (error, response, body) => {
-	if (error) {
-		return console.log('crawl weibo error: ' + error);
-	}
-	var hotDataDiv = getHotDataDiv(body);
-	// console.log('hotDataDiv: ' + hotDataDiv);
-	parseHotDataDiv(hotDataDiv);
-});
-
+module.exports = () => {
+	request(crawlOpt, (error, response, body) => {
+		if (error) {
+			return console.log('crawl weibo error: ' + error);
+		}
+		var hotDataDiv = getHotDataDiv(body);
+		// console.log('hotDataDiv: ' + hotDataDiv);
+		parseHotDataDiv(hotDataDiv);
+	});
+}
 // weibo 实时热搜榜的数据在 js 代码里
 // <script>
 // STK && STK.pageletM && STK.pageletM.view({
