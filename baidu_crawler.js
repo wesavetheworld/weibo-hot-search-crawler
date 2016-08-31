@@ -17,7 +17,7 @@ const createTableStr = `CREATE TABLE IF NOT EXISTS t_baidu_hot_search_tmp (
 
 const dropAndRenameTableStr = `DROP TABLE IF EXISTS t_baidu_hot_search; RENAME TABLE t_baidu_hot_search_tmp TO t_baidu_hot_search;`;
 
-var crawlOpt = {
+const crawlOpt = {
 	uri: baiduUrl,
 	method: 'GET',
 	encoding: null
@@ -29,8 +29,8 @@ module.exports = () => {
 		if (error) {
 			return console.log('crawl baidu error: ' + error);
 		}
-		var resultBuf = encoding.convert(body, 'utf8', 'gb2312');
-		var html = resultBuf.toString();
+		let resultBuf = encoding.convert(body, 'utf8', 'gb2312');
+		let html = resultBuf.toString();
 		
 		parseHotDataDiv(html);
 	});
@@ -41,10 +41,10 @@ function parseHotDataDiv(data) {
 	if (data === '') {
 		return console.log('div data is empty.');
 	}
-	var rankArr = [];
-	var $ = cheerio.load(data);
-	var allTr = $('.list-table tr').not('.item-tr');
-	for (var i = 1; i < allTr.length; i++) {
+	let rankArr = [];
+	let $ = cheerio.load(data);
+	let allTr = $('.list-table tr').not('.item-tr');
+	for (let i = 1; i < allTr.length; i++) {
 		let rank = $('.first span', allTr[i]).text();
 		let word = $('.keyword .list-title', allTr[i]).text();
 		let star_num = $('.last span', allTr[i]).text();
@@ -63,7 +63,7 @@ function parseHotDataDiv(data) {
 
 
 function writeDB(data) {
-	var connection = mysql.createConnection({
+	let connection = mysql.createConnection({
 		host: 'localhost',
 		port: '3306',
 		user: 'shel',
@@ -81,8 +81,8 @@ function writeDB(data) {
 		if (error) {
 			return console.log('create table error: ' + error);
 		}
-		var sql = '';
-		for (var i = 0; i < data.length; i++) {
+		let sql = '';
+		for (let i = 0; i < data.length; i++) {
 			sql += mysql.format('insert into t_baidu_hot_search_tmp set ?;', data[i]);
 		}
 		// console.log('sql:' + sql);

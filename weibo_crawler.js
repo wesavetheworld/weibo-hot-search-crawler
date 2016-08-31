@@ -20,7 +20,7 @@ const createTableStr = `CREATE TABLE IF NOT EXISTS t_weibo_hot_search_tmp (
 
 const dropAndRenameTableStr = `DROP TABLE IF EXISTS t_weibo_hot_search; RENAME TABLE t_weibo_hot_search_tmp TO t_weibo_hot_search;`;
 
-var crawlOpt = {
+const crawlOpt = {
 	uri: weiboUrl,
 	method: 'GET',
 	gzip: true
@@ -31,7 +31,7 @@ module.exports = () => {
 		if (error) {
 			return console.log('crawl weibo error: ' + error);
 		}
-		var hotDataDiv = getHotDataDiv(body);
+		let hotDataDiv = getHotDataDiv(body);
 		// console.log('hotDataDiv: ' + hotDataDiv);
 		parseHotDataDiv(hotDataDiv);
 	});
@@ -47,15 +47,15 @@ module.exports = () => {
 // </script>
 // html 字段中即是热搜数据的 dom 结构
 function getHotDataDiv(body) {
-	var $ = cheerio.load(body);
-	var allScriptTag = $('script');
-	for (var i = 0; i < allScriptTag.length; i++) {
-		var text = $(allScriptTag[i]).text();
+	let $ = cheerio.load(body);
+	let allScriptTag = $('script');
+	for (let i = 0; i < allScriptTag.length; i++) {
+		let text = $(allScriptTag[i]).text();
 		// console.log('script text: ' + text);
-		var pos = text.indexOf('"pid":"pl_top_realtimehot"');
+		let pos = text.indexOf('"pid":"pl_top_realtimehot"');
 		if (pos >= 0) {
-			var jsonStr = text.slice(text.indexOf('{'), text.lastIndexOf('}') + 1);
-			var json = JSON.parse(jsonStr);
+			let jsonStr = text.slice(text.indexOf('{'), text.lastIndexOf('}') + 1);
+			let json = JSON.parse(jsonStr);
 			return json.html;
 		}
 
@@ -67,10 +67,10 @@ function parseHotDataDiv(data) {
 	if (data === '') {
 		return console.log('div data is empty.');
 	}
-	var rankArr = [];
-	var $ = cheerio.load(data);
-	var allTr = $('.hot_ranklist .star_bank_table tr').not('.thead_tr');
-	for (var i = 0; i < allTr.length; i++) {
+	let rankArr = [];
+	let $ = cheerio.load(data);
+	let allTr = $('.hot_ranklist .star_bank_table tr').not('.thead_tr');
+	for (let i = 0; i < allTr.length; i++) {
 		let rank = $('.td_01 span em', allTr[i]).text();
 		let word = $('.td_02 div p a', allTr[i]).text();
 		let url = urlPre + $('.td_02 div p a', allTr[i]).attr('href');
@@ -96,7 +96,7 @@ function parseHotDataDiv(data) {
 
 
 function writeDB(data) {
-	var connection = mysql.createConnection({
+	let connection = mysql.createConnection({
 		host: 'localhost',
 		port: '3306',
 		user: 'shel',
@@ -114,8 +114,8 @@ function writeDB(data) {
 		if (error) {
 			return console.log('create table error: ' + error);
 		}
-		var sql = '';
-		for (var i = 0; i < data.length; i++) {
+		let sql = '';
+		for (let i = 0; i < data.length; i++) {
 			sql += mysql.format('insert into t_weibo_hot_search_tmp set ?;', data[i]);
 		}
 		// console.log('sql:' + sql);
